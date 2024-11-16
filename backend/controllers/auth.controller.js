@@ -1,5 +1,5 @@
 import User from '../models/User.model.js';
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 export const signup = async(req, res) => {
   try {
@@ -7,9 +7,11 @@ export const signup = async(req, res) => {
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     if (!emailRegex.test(email)) {
-      return res.status(400).json({ error: "Invalid email format" });
-    }
+       return res.status(400).json({ error: "Invalid email format" });
+     }
+
 
     // Check for existing username
     const existingUser = await User.findOne({ username });
@@ -18,7 +20,7 @@ export const signup = async(req, res) => {
     }
 
     // Check for existing email
-    const existingEmail = await User.findOne({ email });
+    const existingEmail = await User.findOne({email});
     if (existingEmail) {
       return res.status(400).json({ error: "Email is already taken" });
     }
@@ -59,6 +61,7 @@ export const signup = async(req, res) => {
     res.status(500).json({ error: "An unexpected error occurred. Please try again later." });
   }
 };
+
 export const login = async (req, res) => {
   res.json({
     data: "You hit the login endpoint",
